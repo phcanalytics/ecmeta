@@ -1,0 +1,131 @@
+---
+title: "User guide"
+date: "`r Sys.Date()`"
+output:
+  html_document: 
+    toc: TRUE
+    toc_float: TRUE
+    toc_depth: 2
+    number_sections: TRUE 
+pkgdown: 
+  as_is: false
+---
+
+# Purpose
+This vignette describes how to use the `R` package to estimate treatment effects for a new single-arm study with an external control arm. See `vignette("methodology")` for details on the methodology. 
+
+Note that you will need to install JAGS as well as the `rjags` package (see the [home page](../index.html#jags)). We will also use `bayesplot` and `ggplot2` to visualize our Bayesian models.
+
+```{r setup, message = FALSE}
+library("ecmeta")
+library("bayesplot")
+library("ggplot2")
+set.seed(25)
+```
+
+# Example reference studies
+We start by simulating an example set of 15 reference studies with no bias ($\mu = 0$) and between study variability based on hazard ratios (HRs) uniformly distributed between 0.7 and 1.3. Standard errors of the log HRs are set based on the number of events in each arm (internal control and external control) ranging uniformly between 100 and 800.  
+
+```{r example data}
+# Simulated example data
+N <- 15
+mu <- 0 # True bias
+sigma <- .16 # True between study variability
+n_events_ec <- runif(N, 100, 800)
+n_events_ic <- runif(N, 100, 800)
+loghr_ic_ec_var <- 1/n_events_ic + 1/n_events_ec
+loghr_ic_ec_est <- rnorm(n = N, mean = mu, sd = sqrt(sigma^2 + loghr_ic_ec_var))
+paste0("Observed bias: ", round(mean(loghr_ic_ec_est), 2))
+paste0("Observed variability: ", round(sd(loghr_ic_ec_est), 2))
+```
+
+# Model estimation using reference studies
+We estimate $\mu$ and $\sigma$ with `ecmeta()`, using JAGS to perform Markov Chain Monte Carlo (MCMC) sampling. We run 5 chains to help assess convergence. The thinning intervals and number of burn-in iterations can be controlled, but the model converges very quickly so we use every draw (i.e., `thin = 1` and `n_burnin = 0`). A uniform, Student t, or inverse gamma distribution can be used for the dispersion parameter ($\sigma$ with the uniform and Student t priors; $\sigma^2$ with an inverse gamma prior); we use a half-Cauchy distribution here, which is a Student t distribution with 1 degree of freedom.
+
+```{r ecmeta}
+loghr_ic_ec <- loghr_data(loghr_ic_ec_est, sqrt(loghr_ic_ec_var))
+loghr_ecmeta <- ecmeta(
+  loghr_ic_ec, 
+  n_iter = 1000,
+  n_chains = 5, n_burnin = 0, thin = 1,
+  quiet = TRUE, 
+  prior_mu = normal(0, 100), 
+  prior_scale = student_t(0, 10, 1) # half-Cauchy
+)
+loghr_ecmeta
+```
+
+The default print method summarizes the posterior distributions of the parameters.  
+
+```{r ecmetaPrint}
+loghr_ecmeta
+```
+
+## Diagnostics
+Its a good idea to assess the model to ensure it converged. We could see from the summaries above that the R-hats were very close to 1, which suggests that the chains were converging. 
+
+We also recommend using the `bayesplot` package to produce diagnostic plots (note, however, that in order to keep the package light we don't import `bayesplot`, so you will need to install it yourself). Objects returned by `ecmeta()` have `as.array()` methods so that they can be passed to any `bayesplot` function that accepts an object with an `as.array()` method  (e.g., `bayesplot::mcmc_trace()`). The trace plot suggests that the chain mixed well and that there were no issues with convergence.
+
+```{r ecmetaTrace}
+mcmc_trace(loghr_ecmeta)
+```
+
+We can also plot the draws from the posterior distribution of $\mu$ and $\sigma$.
+
+```{r ecmetaHist}
+mcmc_hist(loghr_ecmeta, binwidth = .0005)
+```
+
+# Model prediction for new study
+We now consider a new study in which the estimated HR was 0.8 and there were 250 events in the treatment arm and 300 events in the control arm. We can therefore approximate the variance of the log HR as 1/250 + 1/300 (although in a real application with propensity score methods the standard error would likely be estimated via bootstrapping or from a closed form approximation).  
+
+```{r newstudy}
+new_loghr_trt_ec <- loghr_data(
+  estimate = log(.8),
+  standard_error = sqrt(1/250 + 1/300)
+)
+```
+
+Predictions of the true log HR for a hypothetical scenario in which an internal control arm existed are predicted using (i) the estimated log HR above, $\hat{\lambda}_{TRTvEC} = 0.8$ and (ii) the model for $\hat{\lambda}_{ICvEC}$ fit above with `ecmeta()` using the reference studies.
+
+Specifically, we first use MCMC to draw samples from $\lambda_{TRTvEC}$ where $\hat{\lambda}$ is an estimate of a log HR and $\lambda$ is the true underlying parameter (see `vignette("methodology")` for an explanation of the distinction between true and estimated HRs). These draws are then combined with the draws of $mu$ and $\sigma$ to (i) draw samples from the posterior predictive distribution of $\lambda_{ICvEC}$ and (ii) then, to compute, $\lambda_{TRTvIC} = \lambda_{TRTvEC} - \lambda_{ICvEC}$. The quantity $\lambda_{TRTvIC}$ effectively adjusts the distribution of $\lambda_{TRTvEC}$ for the bias and between study variability estimated from the reference studies.
+
+```{r predictEcmeta}
+loghr_new <- predict(
+  loghr_ecmeta,
+  newdata = new_loghr_trt_ec,
+  quiet = TRUE
+)
+loghr_new
+```
+
+## Diagnostics
+Similar to above, we inspect the trace of $\lambda_{TRTvEC}$ and detect no issues.
+
+```{r}
+mcmc_trace(loghr_new)
+```
+
+## Hazard ratios
+The`summary()` method for the prediction object can exponentiate the log HRs to produce posterior summaries of the HRs. The observed bias in our reference studies was small ($\mu$ close to 0), so the means of $\lambda_{TRTvIC}$ and $\lambda_{TRTvEC}$ are very similar as well. However, $\lambda_{TRTvIC}$ has a considerably wider distribution due to the assumed between study variability.   
+
+```{r}
+summary(loghr_new, exponentiate = TRUE)
+```
+
+# Quicker simulations
+In some cases (e.g., when running simulations) it might be useful to simulate predictions for the new study very quickly. In this case, we can use a maximum likelihood based approach instead of the Bayesian approach described above. 
+
+```{r ecmetaMl}
+loghr_ecmeta_ml <- ecmeta(loghr_ic_ec, method = "ml")
+loghr_ecmeta_ml
+```
+
+The results are similar to those from the Bayesian approach, although the estimates of $\sigma$ are smaller using maximum likelihood, a discrepancy that becomes increasingly small as the number of reference studies increases.
+
+```{r ecmetaMlPredict}
+loghr_new_ml <- predict(loghr_ecmeta_ml, newdata = new_loghr_trt_ec)
+
+summary(loghr_new, exponentiate = TRUE)
+summary(loghr_new_ml, exponentiate = TRUE)
+```

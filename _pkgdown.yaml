@@ -1,0 +1,46 @@
+template:
+  params:
+    bootswatch: cerulean
+
+development:
+  mode: auto
+
+repo:
+  url:
+    home: https://github.roche.com/RWDScodeshare/ecmeta
+    source: https://github.roche.com/RWDScodeshare/ecmeta/blob/master/
+    issue: https://github.roche.com/RWDScodeshare/ecmeta/issues/
+    user: https://github.roche.com
+
+reference:
+  - title: "Datasets of reference studies"
+    contents:
+      - loghr_data
+      - as_loghr_data
+  - title: "Model estimation with reference studies"
+    contents:
+      - ecmeta
+      - priors
+      - summary.ecmeta_jags
+      - summary.ecmeta_ml
+  - title: "Prediction for new study"
+    contents:
+      - predict.ecmeta
+      - summary.ecmeta_prediction
+  - title: "Bayesian model diagnostics"
+    desc: >
+      Helper functions that facilitate visualization of model diagnostics
+      with the `bayesplot` package. The `as.array()` methods in particular allows
+      `ecmeta` and `ecmeta` prediction objects to be passed directly to any 
+      `bayesplot` function in which the first arguemnt accepts an object
+      with an `as.array()` method. See for instance `bayesplot::mcmc_trace()`. 
+    contents:
+      - as.array.ecmeta
+
+navbar:
+  title: ecmeta
+  left:
+  - text: "Functions"
+    href: reference/index.html
+  - text: "User guide"
+    href: articles/guide.html

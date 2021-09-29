@@ -1,0 +1,9 @@
+.Rproj.user
+ecmeta.Rproj
+.Rhistory
+.RData
+.Ruserdata
+.DS_STORE
+.Rprofile
+renv/.gitignore
+renv/settings.dcf

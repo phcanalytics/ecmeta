@@ -1,0 +1,28 @@
+Package: ecmeta
+Type: Package
+Title: Meta-Analytic Framework for Decision Making and Error Control with External Control Arms
+Version: 0.1.0
+Authors@R: c(
+    person("Devin", "Incerti", , "incerti.devin@gene.com", role = c("aut", "cre")),
+    person("Michael", "Bretscher", , "michael.bretscher@roche.com", role = c("aut")),
+    person("Ray", "Lin", , "lins24@gene.com", role = c("aut")),
+    person("Chris", "Harbron", , "chris.harbron@roche.com", role = c("aut"))
+    )
+Description: Tools to estimate the parameters of a meta-analytic framework that
+  adjusts external control studies for additional bias and variability due 
+  to their non-randomized design. 
+URL: https://github.roche.com/RWDScodeshare/ecmeta
+BugReports: https://github.roche.com/RWDScodeshare/ecmeta
+License: MIT
+LazyData: true
+Depends:
+    R (>= 3.6.0)
+Imports:
+  coda
+Suggests:
+  rjags,
+  bayesplot,
+  ggplot2
+VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
