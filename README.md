@@ -2,7 +2,7 @@
 ## Overview
 The `ecmeta` `R` package provides tools to implement a meta-analytic framework that adjusts external control studies for additional bias and variability due to their non-randomized design. The meta-analysis is used to compare internal trial controls and external controls and is performed on a set of historical references studies. The parameters of the meta-analytic model are, in turn, used to to adjust estimate of a new study that compares an experimental treatment with an external control arm.
 
-A paper describing the methodology and evauating its performance is available at the GitHub repository [here](https://github.roche.com/incertid/ecmeta-manuscript). For an example analysis, see the [user guide](https://github.com/phcanalytics/ecmeta/articles/guide.html).
+A paper describing the methodology and evauating its performance is available at the GitHub repository [here](https://github.roche.com/incertid/ecmeta-manuscript). For an example analysis, see the [user guide](https://phcanalytics.github.io/ecmeta/articles.guide.html).
 
 ## Installation
 ### R package
