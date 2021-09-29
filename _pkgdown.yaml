@@ -7,10 +7,10 @@ development:
 
 repo:
   url:
-    home: https://github.roche.com/RWDScodeshare/ecmeta
-    source: https://github.roche.com/RWDScodeshare/ecmeta/blob/master/
-    issue: https://github.roche.com/RWDScodeshare/ecmeta/issues/
-    user: https://github.roche.com
+    home: https://github.com/phcanalytics/ecmeta
+    source: https://github.com/phcanalytics/ecmeta/blob/master/
+    issue: https://github.com/phcanalytics/ecmeta/issues/
+    user: https://github.com
 
 reference:
   - title: "Datasets of reference studies"

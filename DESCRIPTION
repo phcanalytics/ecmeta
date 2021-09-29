@@ -11,8 +11,8 @@ Authors@R: c(
 Description: Tools to estimate the parameters of a meta-analytic framework that
   adjusts external control studies for additional bias and variability due 
   to their non-randomized design. 
-URL: https://github.roche.com/RWDScodeshare/ecmeta
-BugReports: https://github.roche.com/RWDScodeshare/ecmeta
+URL: https://github.com/phcanalytics/ecmeta
+BugReports: https://github.com/phcanalytics/ecmeta/issues
 License: MIT
 LazyData: true
 Depends:

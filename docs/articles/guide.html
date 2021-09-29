@@ -46,7 +46,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.roche.com/RWDScodeshare/ecmeta">
+  <a href="https://github.com/phcanalytics/ecmeta">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -66,9 +66,9 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>User guide</h1>
             
-            <h4 class="date">2021-09-14</h4>
+            <h4 class="date">2021-09-29</h4>
       
-      <small class="dont-index">Source: <a href="https://github.roche.com/RWDScodeshare/ecmeta/blob/master/vignettes/guide.Rmd"><code>vignettes/guide.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/phcanalytics/ecmeta/blob/master/vignettes/guide.Rmd"><code>vignettes/guide.Rmd</code></a></small>
       <div class="hidden name"><code>guide.Rmd</code></div>
 
     </div>
@@ -81,7 +81,7 @@
 <p>This vignette describes how to use the <code>R</code> package to estimate treatment effects for a new single-arm study with an external control arm. See <code>vignette("methodology")</code> for details on the methodology.</p>
 <p>Note that you will need to install JAGS as well as the <code>rjags</code> package (see the <a href="../index.html#jags">home page</a>). We will also use <code>bayesplot</code> and <code>ggplot2</code> to visualize our Bayesian models.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.roche.com/RWDScodeshare/ecmeta">"ecmeta"</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/phcanalytics/ecmeta">"ecmeta"</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://mc-stan.org/bayesplot/">"bayesplot"</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org">"ggplot2"</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">25</span><span class="op">)</span></code></pre></div>
@@ -125,12 +125,12 @@
 ## Number of chains = 5 
 ## Sample size per chain = 1000 
 ## 
-##   param       mean     se_naive       se_ts         sd       2.5%        25%
-## 1    mu 0.01004968 0.0008079500 0.000965979 0.05713069 -0.1052837 -0.0266317
-## 2 sigma 0.20524271 0.0006998475 0.001291800 0.04948669  0.1264375  0.1702841
+##   param       mean     se_naive        se_ts         sd       2.5%         25%
+## 1    mu 0.01247164 0.0008369513 0.0009339481 0.05918140 -0.1076152 -0.02560784
+## 2 sigma 0.20665742 0.0007392423 0.0013680606 0.05227232  0.1278520  0.16990830
 ##          50%        75%     97.5%     rhat
-## 1 0.01027317 0.04764843 0.1248047 1.000439
-## 2 0.19934674 0.23272684 0.3199668 1.005193</code></pre>
+## 1 0.01349039 0.04996254 0.1283144 1.001139
+## 2 0.19867955 0.23504764 0.3322990 1.011384</code></pre>
 <p>The default print method summarizes the posterior distributions of the parameters.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">loghr_ecmeta</span></code></pre></div>
@@ -139,12 +139,12 @@
 ## Number of chains = 5 
 ## Sample size per chain = 1000 
 ## 
-##   param       mean     se_naive       se_ts         sd       2.5%        25%
-## 1    mu 0.01004968 0.0008079500 0.000965979 0.05713069 -0.1052837 -0.0266317
-## 2 sigma 0.20524271 0.0006998475 0.001291800 0.04948669  0.1264375  0.1702841
+##   param       mean     se_naive        se_ts         sd       2.5%         25%
+## 1    mu 0.01247164 0.0008369513 0.0009339481 0.05918140 -0.1076152 -0.02560784
+## 2 sigma 0.20665742 0.0007392423 0.0013680606 0.05227232  0.1278520  0.16990830
 ##          50%        75%     97.5%     rhat
-## 1 0.01027317 0.04764843 0.1248047 1.000439
-## 2 0.19934674 0.23272684 0.3199668 1.005193</code></pre>
+## 1 0.01349039 0.04996254 0.1283144 1.001139
+## 2 0.19867955 0.23504764 0.3322990 1.011384</code></pre>
 <div id="diagnostics" class="section level2">
 <h2 class="hasAnchor">
 <a href="#diagnostics" class="anchor"></a>Diagnostics</h2>
@@ -192,13 +192,13 @@
 ## 
 ## Summaries of the posterior distributions are displayed below:
 ##          param        mean    se_naive         sd       2.5%        25%
-## 1 loghr_trt_ic -0.23758006 0.003343845 0.23644552 -0.7164481 -0.3861098
-## 2 loghr_trt_ec -0.22614351 0.001219911 0.08626074 -0.3905472 -0.2857715
-## 3  loghr_ic_ec  0.01143655 0.003102722 0.21939557 -0.4267720 -0.1273988
-##            50%         75%       97.5%     rhat
-## 1 -0.238199984 -0.08314489  0.23571650       NA
-## 2 -0.226472638 -0.16678924 -0.05761753 1.001748
-## 3  0.005975668  0.14775068  0.45449840       NA</code></pre>
+## 1 loghr_trt_ic -0.23564840 0.003394812 0.24004948 -0.7087490 -0.3853649
+## 2 loghr_trt_ec -0.22384135 0.001210969 0.08562847 -0.3934591 -0.2797593
+## 3  loghr_ic_ec  0.01180705 0.003175226 0.22452241 -0.4456103 -0.1303848
+##           50%         75%       97.5%     rhat
+## 1 -0.23916606 -0.08321095  0.24634629       NA
+## 2 -0.22281606 -0.16577454 -0.05581878 1.002426
+## 3  0.01219141  0.14879948  0.45655704       NA</code></pre>
 <div id="diagnostics-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#diagnostics-1" class="anchor"></a>Diagnostics</h2>
@@ -213,14 +213,14 @@
 <p>The<code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> method for the prediction object can exponentiate the log HRs to produce posterior summaries of the HRs. The observed bias in our reference studies was small (<span class="math inline">\(\mu\)</span> close to 0), so the means of <span class="math inline">\(\lambda_{TRTvIC}\)</span> and <span class="math inline">\(\lambda_{TRTvEC}\)</span> are very similar as well. However, <span class="math inline">\(\lambda_{TRTvIC}\)</span> has a considerably wider distribution due to the assumed between study variability.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">loghr_new</span>, exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code>##       param      mean    se_naive         sd      2.5%       25%       50%
-## 1 hr_trt_ic 0.8109941 0.002798689 0.19789720 0.4884842 0.6796959 0.7880451
-## 2 hr_trt_ec 0.8005806 0.000980652 0.06934257 0.6766865 0.7514343 0.7973412
-## 3  hr_ic_ec 1.0362460 0.003302685 0.23353512 0.6526124 0.8803825 1.0059936
+<pre><code>##       param      mean     se_naive         sd      2.5%       25%       50%
+## 1 hr_trt_ic 0.8134237 0.0028816307 0.20376206 0.4922596 0.6802024 0.7872841
+## 2 hr_trt_ec 0.8023740 0.0009718095 0.06871731 0.6747189 0.7559656 0.8002620
+## 3  hr_ic_ec 1.0375320 0.0033325990 0.23565033 0.6404333 0.8777576 1.0122660
 ##         75%     97.5%     rhat
-## 1 0.9202178 1.2658154       NA
-## 2 0.8463780 0.9440109 1.001748
-## 3 1.1592238 1.5753831       NA</code></pre>
+## 1 0.9201570 1.2793426       NA
+## 2 0.8472372 0.9457105 1.002426
+## 3 1.1604403 1.5786295       NA</code></pre>
 </div>
 </div>
 <div id="quicker-simulations" class="section level1">
@@ -239,14 +239,14 @@
 <code class="sourceCode R"><span class="va">loghr_new_ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">loghr_ecmeta_ml</span>, newdata <span class="op">=</span> <span class="va">new_loghr_trt_ec</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">loghr_new</span>, exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code>##       param      mean    se_naive         sd      2.5%       25%       50%
-## 1 hr_trt_ic 0.8109941 0.002798689 0.19789720 0.4884842 0.6796959 0.7880451
-## 2 hr_trt_ec 0.8005806 0.000980652 0.06934257 0.6766865 0.7514343 0.7973412
-## 3  hr_ic_ec 1.0362460 0.003302685 0.23353512 0.6526124 0.8803825 1.0059936
+<pre><code>##       param      mean     se_naive         sd      2.5%       25%       50%
+## 1 hr_trt_ic 0.8134237 0.0028816307 0.20376206 0.4922596 0.6802024 0.7872841
+## 2 hr_trt_ec 0.8023740 0.0009718095 0.06871731 0.6747189 0.7559656 0.8002620
+## 3  hr_ic_ec 1.0375320 0.0033325990 0.23565033 0.6404333 0.8777576 1.0122660
 ##         75%     97.5%     rhat
-## 1 0.9202178 1.2658154       NA
-## 2 0.8463780 0.9440109 1.001748
-## 3 1.1592238 1.5753831       NA</code></pre>
+## 1 0.9201570 1.2793426       NA
+## 2 0.8472372 0.9457105 1.002426
+## 3 1.1604403 1.5786295       NA</code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">loghr_new_ml</span>, exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <pre><code>##       param      mean    se_naive         sd      2.5%       25%       50%
