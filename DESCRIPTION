@@ -18,9 +18,9 @@ LazyData: true
 Depends:
     R (>= 3.6.0)
 Imports:
-  coda
+  coda,
+  rjags
 Suggests:
-  rjags,
   bayesplot,
   ggplot2
 VignetteBuilder: knitr
